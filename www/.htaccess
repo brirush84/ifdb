@@ -16,8 +16,8 @@ Options FollowSymLinks
 RewriteBase /
 
 #Uncomment to enable maintenance mode
-#RewriteCond %{REQUEST_URI} "!/error503"
-#RewriteRule .* - [R=503,L]
+RewriteCond %{REQUEST_URI} "!/error503"
+RewriteRule .* - [R=503,L]
 
 RewriteCond %{HTTPS} !=on
 RewriteCond %{HTTP_HOST} ^ifdb.org$ [OR]
