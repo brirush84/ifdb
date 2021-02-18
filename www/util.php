@@ -3091,7 +3091,9 @@ function send_mail($to, $subject, $message, $additional_headers) {
         error_log($message);
         return true;
     } else {
-        return mail($to, $subject, $message, $additional_headers);
+        $r = mail($to, $subject, $message, $additional_headers);
+        error_log("send_mail result $r to $to: $subject");
+        return $r;
     }
 }
 
