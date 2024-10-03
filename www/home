@@ -1,3 +1,35 @@
+
+<!-- Add this in the head or an external CSS file -->
+<style>
+.tabs {
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+.tab-button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+.tab-button:hover {
+  background-color: #ddd;
+}
+
+.tab-content {
+  display: none;
+  padding: 6px 12px;
+  border-top: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+</style>
 <?php
 
 include_once "session-start.php";
@@ -34,23 +66,38 @@ if ($debugflag) echo "debug mode enabled...<br>";
 
 <?php pageHeader("The Interactive Fiction Database - IF and Text Adventures")?>
 
+
+<!-- Add this in the appropriate section -->
+<div class="tabs">
+  <button class="tab-button" onclick="openTab(event, 'Tab1')">Tab 1</button>
+  <button class="tab-button" onclick="openTab(event, 'Tab2')">Tab 2</button>
+  <button class="tab-button" onclick="openTab(event, 'Tab3')">Tab 3</button>
+</div>
+
+<div id="Tab1" class="tab-content">
+  <h3>Tab 1</h3>
+  <p>Content for Tab 1.</p>
+</div>
+
+<div id="Tab2" class="tab-content">
+  <h3>Tab 2</h3>
+  <p>Content for Tab 2.</p>
+</div>
+
+<div id="Tab3" class="tab-content">
+  <h3>Tab 3</h3>
+  <p>Content for Tab 3.</p>
+</div>
+
 <div class="flexer">
-<div id="London" class="tabcontent">
-  <h3>London</h3>
-  <p>London is the capital city of England.</p>
-</div>
 
-<div id="Paris" class="tabcontent">
-  <h3>Paris</h3>
-  <p>Paris is the capital of France.</p> 
-</div>
 
-<div id="Tokyo" class="tabcontent">
-  <h3>Tokyo</h3>
-  <p>Tokyo is the capital of Japan.</p>
-</div>
+
+
+
+
    <div class="column col-main">
-    
+
       <div class="block">
          <details id="welcome-details" <?= $welcomeOpen ? "open" : ""?>>
          <summary>
@@ -100,67 +147,7 @@ if ($debugflag) echo "debug mode enabled...<br>";
       </div>
 
       <?php include "components/check-inbox.php"?>
-<style>
 
-/* Style the tab */
-.tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
-}
-
-/* Style the buttons inside the tab */
-.tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-size: 17px;
-}
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-  background-color: #ddd;
-}
-
-/* Create an active/current tablink class */
-.tab button.active {
-  background-color: #ccc;
-}
-
-/* Style the tab content */
-.tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none;
-}
-</style>
-<div class="tab">
-  <button class="tablinks" onclick="openCity(event, 'London')">London</button>
-  <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
-</div>
-
-
-<script>
-function openCity(evt, cityName) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(cityName).style.display = "block";
-  evt.currentTarget.className += " active";
-}
-</script>
       <div class="block">
          <div class=headline>New on IFDB
             <span class=headlineRss>
@@ -249,3 +236,23 @@ function openCity(evt, cityName) {
 </div>
 
 <?php pageFooter()?>
+
+<!-- Add this near the end of the body -->
+<script>
+function openTab(evt, tabName) {
+  var i, tabContent, tabButtons;
+
+  tabContent = document.getElementsByClassName("tab-content");
+  for (i = 0; i < tabContent.length; i++) {
+    tabContent[i].style.display = "none";
+  }
+
+  tabButtons = document.getElementsByClassName("tab-button");
+  for (i = 0; i < tabButtons.length; i++) {
+    tabButtons[i].className = tabButtons[i].className.replace(" active", "");
+  }
+
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
