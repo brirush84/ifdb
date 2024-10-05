@@ -229,7 +229,29 @@ function doSearch($db, $term, $searchType, $sortby, $limit, $browse)
         $likeCol = "gt.tag";
         $summaryDesc = "Tags";
     }
-    else
+    else if ($searchType == "review")
+    {
+        // special keywords for tag search
+        $specialMap = array(
+            "review:" => array("review", 0));
+
+            $selectList = "r.id as id,
+            u.name as name,
+            g.title as title,
+            date_format(r.createdate, '%M %e, %Y') as createdfmt,
+            r.summary as summary";
+        $tableList = "reviews as r"
+                . "  join games as g on r.gameid = g.id"
+                . "  join users as u"
+                . "    on u.id = r.userid";
+        $baseWhere = "";
+        $groupBy = "group by r.id";
+        $baseOrderBy = "r.summary";
+        $matchCols = "r.summary, r.userid";
+        $likeCol = "r.summary";
+        $summaryDesc = "Reviews";
+    }
+   else
     {
         // special keywords for game search:  "keyword:" => descriptor
         $specialMap = array(

@@ -197,6 +197,7 @@ $searchType = (isset($_REQUEST['list']) ? "list" :
                isset($_REQUEST['comp']) ? "comp" :
                isset($_REQUEST['club']) ? "club" :
                isset($_REQUEST['tag']) ? "tag" :
+               isset($_REQUEST['review']) ? "review" :
                "game");
 
 $browseTabs = array(
@@ -206,6 +207,7 @@ $browseTabs = array(
     "comp"    => "Competitions",
     "club"    => "Clubs",
     "member"  => "Members",
+    "review"  => "Reviews",
     "tag"     => "Tags");
 
 if (isset($_REQUEST['list'])) {
@@ -237,6 +239,11 @@ else if (isset($_REQUEST['tag'])) {
     $searchType = "tag";
     $searchButton = "Search Tags";
     $hiddenTypeField = "<input type=\"hidden\" name=\"tag\" value=\"1\">";
+}
+else if (isset($_REQUEST['review'])) {
+    $searchType = "review";
+    $searchButton = "Search Reviewss";
+    $hiddenTypeField = "<input type=\"hidden\" name=\"review\" value=\"1\">";
 }
 else {
     $searchType = "game";
@@ -819,7 +826,45 @@ else if ($searchType == "tag") {
 
     <?php
 }
-else {  // ...default is searching games
+else if ($searchType == "review") {
+
+    ?>
+
+    <form name="advsearch" method="get" action="search">
+       <!-- <h2>Search Member Directory</h2> -->
+       <table cellpadding=0 cellspacing=0>
+          <tr>
+             <td>
+                <input type="text" name="searchfor" id="searchfor" size=70
+                      value="<?php echo htmlspecialcharx($tTerm) ?>">
+                <input type="submit" name="searchgo" value="Search Reviews">
+             </td>
+          </tr>
+          <tr>
+             <td></td>
+          </tr>
+       </table>
+       <input type="hidden" name="review" value="1">
+    </form>
+
+    <h3>Search Tips</h3>
+
+    <div class=searchnotes>
+
+    <p>By default, IFDB searches each review for blah blah blah
+
+
+    <div class=indented>
+
+       <?php echo $commonInstructions ?>
+
+    </div>
+
+    </div>
+
+
+    <?php
+}else {  // ...default is searching games
 
     ?>
 
@@ -1052,6 +1097,7 @@ if ($xml) {
         "poll" => "polls",
         "comp" => "competitions",
         "club" => "clubs",
+        "review" => "reviews",
         "member" => "members"
     );
     $grouptag = $grouptags[$searchType];
@@ -1224,7 +1270,11 @@ if ($xml) {
             $id = $row['tag'];
             $link = htmlspecialcharx(get_root_url() . "search?searchfor=tag:$id");
             break;
-        }
+        case "review":
+            $id = $row['review'];
+            $link = htmlspecialcharx(get_root_url() . "search?searchfor=review:$id");
+            break;
+       }
     }
 
     // end the XML reply
@@ -1255,6 +1305,7 @@ else if ($term || $browse)
                                  . ($searchType == "member" ? "&member" : "")
                                  . ($searchType == "comp" ? "&comp" : "")
                                  . ($searchType == "club" ? "&club" : "")
+                                 . ($searchType == "review" ? "&review" : "")
                                  . ($searchType == "tag" ? "&tag" : ""),
                                  $pg, $lastPage, $firstOnPage, $lastOnPage,
                                  $rowcnt, true,
@@ -1679,7 +1730,24 @@ else if ($term || $browse)
                         . "</span>";
                 }
                 break;
-
+                case "review":
+                    // get the row data
+                    $id = $row['id'];
+                    $summary = htmlspecialcharx($row['summary']);
+                    $name = htmlspecialcharx($row['name']);
+                    $title = htmlspecialcharx($row['title']);
+                    $author = htmlspecialcharx($row['author']);
+                    $createdfmt = $row['createdfmt'];
+                    // generate the user listing
+                    echo "<p><hr class=dots><p>";
+                        echo "<h3 class=result><a href=\"showuser?id=$id\">"
+                            . "<b>$name</b></a></h3><br>"
+                            . "<span class=details>"
+                            . "Review: $summary<br><br>"
+                            . "Posted: $createdfmt<br><br>"
+                            . "</span>";
+                    
+                    break;
             case "tag":
                 // get the row data
                 $id = $row['tag'];
